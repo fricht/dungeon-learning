@@ -1,6 +1,8 @@
+#include "matrix.hpp"
 #include <iostream>
 
 
 int main() {
-    printf("Hello World!\n");
+    Matrix<int> mat{10, 10};
+    std::cout << mat.rows << " : " << mat.cols << std::endl;
 }

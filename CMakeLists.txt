@@ -6,4 +6,10 @@ project(
     LANGUAGES CXX
 )
 
-add_executable(main src/main.cpp)
+set(CMAKE_CXX_COMPILER g++)
+
+set(SOURCE_FILE
+    src/matrix.hpp
+)
+
+add_executable(main src/main.cpp src/matrix.hpp)
