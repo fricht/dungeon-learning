@@ -12,4 +12,4 @@ set(SOURCE_FILE
     src/matrix.hpp
 )
 
-add_executable(main src/main.cpp src/matrix.hpp)
+add_executable(main src/main.cpp)
