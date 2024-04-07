@@ -96,6 +96,23 @@ public:
         return vec;
     };
 
+    template <typename oT> // other type
+    T dot(Vector<oT>& other) {
+        // check for types matching
+        if (std::is_same<T, oT>::value == false) {
+            throw VectorException("Vector types does not match");
+        }
+        if (size != other.size) {
+            // dims not matching !!!
+            throw VectorException("Dimentions (" + std::to_string(size) + ") and (" + std::to_string(other.size) + ") not matching for vector multiplication (elem by elem)");
+        }
+        T out;
+        for (int x = 0; x < size; x++) {
+            out += (*this)[x] * other[x];
+        }
+        return out;
+    };
+
 };
 
 

@@ -152,6 +152,8 @@ public:
         return vec;
     };
 
+    // TODO : implement sub-matrix
+
 };
 
 
