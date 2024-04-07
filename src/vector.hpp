@@ -1,4 +1,4 @@
-#ifndef MATRIX_HPP
+#ifndef VECTOR_HPP
 #define VECTOR_HPP
 
 #include <exception>
