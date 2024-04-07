@@ -128,6 +128,30 @@ public:
         return mat;
     };
 
+    Vector<T>* get_row(int row) {
+        if (row < 0 || row >= rows) {
+            // out of bounds
+            throw MatrixException("Error getting row (" + std::to_string(row) + ") : out of bound (" + std::to_string(rows) + " rows availables)");
+        }
+        Vector<T>* vec = new Vector<T>(cols);
+        for (int x = 0; x < cols; x++) {
+            (*vec)[x] = data[row][x];
+        }
+        return vec;
+    };
+
+    Vector<T>* get_col(int col) {
+        if (col < 0 || col >= cols) {
+            // out of bounds
+            throw MatrixException("Error getting column (" + std::to_string(col) + ") : out of bound (" + std::to_string(cols) + " columns availables)");
+        }
+        Vector<T>* vec = new Vector<T>(rows);
+        for (int x = 0; x < rows; x++) {
+            (*vec)[x] = data[x][col];
+        }
+        return vec;
+    };
+
 };
 
 
