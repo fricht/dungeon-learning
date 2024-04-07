@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <string>
+#include "vector.hpp"
 
 
 class MatrixException : public std::exception {
@@ -35,6 +36,7 @@ public:
     };
 
     Matrix(int c, int r, T default_value) : cols(c), rows(r) {
+        // not using fill to avoid doing same loop twice
         data = new T*[rows];
         for (int y = 0; y < rows; y++) {
             data[y] = new T[cols];
@@ -49,6 +51,14 @@ public:
             delete[] data[i];
         }
         delete[] data;
+    };
+
+    void fill(T val) {
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < cols; x++) {
+                data[y][x] = val;
+            }
+        }
     };
 
     T& operator[](int linear_pos) {
