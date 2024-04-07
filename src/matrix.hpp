@@ -152,6 +152,21 @@ public:
         return vec;
     };
 
+    template <typename oT> // other type
+    Matrix<T>* matmul(Matrix<oT>& other) {
+        // check for types matching
+        if (std::is_same<T, oT>::value == false) {
+            throw MatrixException("Matrix types does not match");
+        }
+        if (cols != other.rows) {
+            // dims not matching !!!
+            throw MatrixException("Dimentions (" + std::to_string(cols) + ", " + std::to_string(rows) + ") and (" + std::to_string(other.cols) + ", " + std::to_string(other.rows) + ") not matching for matrix multiplication.");
+        }
+        Matrix<T>* mat = new Matrix<T>(other.cols, rows);
+        //
+        return mat;
+    };
+
     // TODO : implement sub-matrix
 
 };
