@@ -45,8 +45,6 @@ public:
         }
     };
 
-//
-
     T& operator[](int pos) {
         if (pos < 0 || pos >= size) {
             // out of bounds
