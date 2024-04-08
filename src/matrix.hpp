@@ -163,7 +163,32 @@ public:
             throw MatrixException("Dimentions (" + std::to_string(cols) + ", " + std::to_string(rows) + ") and (" + std::to_string(other.cols) + ", " + std::to_string(other.rows) + ") not matching for matrix multiplication.");
         }
         Matrix<T>* mat = new Matrix<T>(other.cols, rows);
-        //
+
+        Vector<T>** rows_vec = new Vector<T>*[rows];
+        for (int i = 0; i < rows; i++) {
+            rows_vec[i] = get_row(i);
+        }
+        Vector<T>** cols_vec = new Vector<T>*[other.cols];
+        for (int i = 0; i < other.cols; i++) {
+            cols_vec[i] = other.get_col(i);
+        }
+
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < other.cols; x++) {
+                (*mat)[mat->linear_index(x, y)] = (rows_vec[y])->dot(*(cols_vec[y]));
+                std::cout << (*mat)[mat->linear_index(x, y)] << std::endl;
+            }
+        }
+
+        for (int i = 0; i < rows; i++) {
+            delete rows_vec[i];
+        }
+        delete[] rows_vec;
+        for (int i = 0; i < other.cols; i++) {
+            delete cols_vec[i];
+        }
+        delete[] cols_vec;
+
         return mat;
     };
 

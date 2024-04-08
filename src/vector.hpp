@@ -21,7 +21,7 @@ template <typename T>
 class Vector {
 
 private:
-    T** data;
+    T* data;
 
 public:
     int size;
