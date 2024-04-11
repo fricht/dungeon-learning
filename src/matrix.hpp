@@ -176,7 +176,6 @@ public:
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < other.cols; x++) {
                 (*mat)[mat->linear_index(x, y)] = (rows_vec[y])->dot(*(cols_vec[y]));
-                std::cout << (*mat)[mat->linear_index(x, y)] << std::endl;
             }
         }
 
