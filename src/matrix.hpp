@@ -191,6 +191,26 @@ public:
         return mat;
     };
 
+    Matrix<T>* transpose() {
+        Matrix<T>* mat = new Matrix<T>(rows, cols);
+
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                (*mat)[mat->linear_index(y, x)] = (*this)[linear_index(x, y)];
+            }
+        }
+
+        return mat;
+    };
+
+    void set_at(int x, int y, T value) {
+        (*this)[linear_index(x, y)] = value;
+    };
+
+    T get_at(int x, int y) {
+        return (*this)[linear_index(x, y)];
+    };
+
     // TODO : implement sub-matrix
 
 };
