@@ -29,6 +29,10 @@ public:
     int rows;
 
     Matrix(int c, int r) : cols(c), rows(r) {
+        if (c < 1 || r < 1) {
+            throw MatrixException("Invalid Matrix size (" + std::to_string(c) + ", " + std::to_string(r) + ")");
+        };
+
         data = new T*[rows];
         for (int i = 0; i < rows; i++) {
             data[i] = new T[cols];
@@ -36,6 +40,10 @@ public:
     };
 
     Matrix(int c, int r, T default_value) : cols(c), rows(r) {
+        if (c < 1 || r < 1) {
+            throw MatrixException("Invalid Matrix size (" + std::to_string(c) + ", " + std::to_string(r) + ")");
+        };
+
         // not using fill to avoid doing same loop twice
         data = new T*[rows];
         for (int y = 0; y < rows; y++) {
@@ -211,7 +219,37 @@ public:
         return (*this)[linear_index(x, y)];
     };
 
-    // TODO : implement sub-matrix
+    Matrix<T>* slice(int from_x, int from_y, int to_x, int to_y) {
+        // to is not included
+
+        if (from_x >= to_x || from_y >= to_y) {
+            // wrong slice
+            throw MatrixException("Coords from (" + std::to_string(from_x) + ", " + std::to_string(from_y) + ") cant't be greater than to (" + std::to_string(to_x) + ", " + std::to_string(to_y) + ") when slicing.");
+        }
+
+        if (from_x < 0 || from_x >= cols || from_y < 0 || from_y >= rows) {
+            // out of bound
+            throw MatrixException("Error slicing from (" + std::to_string(from_x) + ", " + std::to_string(from_y) + ") : out of bounds (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
+        }
+
+        if (to_x < 0 || to_x >= cols || to_y < 0 || to_y >= rows) {
+            // out of bound
+            throw MatrixException("Error slicing from (" + std::to_string(to_x) + ", " + std::to_string(to_y) + ") : out of bounds (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
+        }
+
+        int dx = to_x - from_x;
+        int dy = to_y - from_y;
+
+        Matrix<T>* mat = new Matrix<T>(dx, dy);
+
+        for (int x = 0; x < dx; x++) {
+            for (int y = 0; y < dy; y++) {
+                (*mat)[mat->linear_index(x, y)] = (*this)[linear_index(x + from_x, y + from_y)];
+            }
+        }
+
+        return mat;
+    };
 
 };
 
