@@ -27,12 +27,31 @@ public:
     int size;
 
     Vector(int s) : size(s) {
+        if (s < 1) {
+            throw VectorException("Invalid Vector size " + std::to_string(s) + ".")
+        };
+
         data = new T[size];
     };
 
     Vector(int s, T default_value) : size(s) {
+        if (s < 1) {
+            throw VectorException("Invalid Vector size " + std::to_string(s) + ".")
+        };
+
         data = new T[size];
         fill(default_value);
+    };
+
+    Vector(int s, T generator(int)) : size(s) {
+        if (s < 1) {
+            throw VectorException("Invalid Vector size " + std::to_string(s) + ".")
+        };
+
+        data = new T[size];
+        for (int i = 0; i < size; i++) {
+            data[i] = generator(i);
+        }
     };
 
     ~Vector() {

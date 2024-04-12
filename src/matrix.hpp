@@ -54,6 +54,21 @@ public:
         }
     };
 
+    Matrix(int c, int r, T generator(int, int)) : cols(c), rows(r) {
+        if (c < 1 || r < 1) {
+            throw MatrixException("Invalid Matrix size (" + std::to_string(c) + ", " + std::to_string(r) + ")");
+        };
+
+        // not using fill to avoid doing same loop twice
+        data = new T*[rows];
+        for (int y = 0; y < rows; y++) {
+            data[y] = new T[cols];
+            for (int x = 0; x < cols; x++) {
+                data[y][x] = generator(x, y);
+            }
+        }
+    };
+
     ~Matrix() {
         for (int i = 0; i < rows; i++) {
             delete[] data[i];
