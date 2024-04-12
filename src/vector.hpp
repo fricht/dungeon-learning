@@ -28,7 +28,7 @@ public:
 
     Vector(int s) : size(s) {
         if (s < 1) {
-            throw VectorException("Invalid Vector size " + std::to_string(s) + ".")
+            throw VectorException("Invalid Vector size " + std::to_string(s) + ".");
         };
 
         data = new T[size];
@@ -36,7 +36,7 @@ public:
 
     Vector(int s, T default_value) : size(s) {
         if (s < 1) {
-            throw VectorException("Invalid Vector size " + std::to_string(s) + ".")
+            throw VectorException("Invalid Vector size " + std::to_string(s) + ".");
         };
 
         data = new T[size];
@@ -45,7 +45,7 @@ public:
 
     Vector(int s, T generator(int)) : size(s) {
         if (s < 1) {
-            throw VectorException("Invalid Vector size " + std::to_string(s) + ".")
+            throw VectorException("Invalid Vector size " + std::to_string(s) + ".");
         };
 
         data = new T[size];
