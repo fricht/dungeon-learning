@@ -266,7 +266,69 @@ public:
         return mat;
     };
 
+    Matrix<T>* append_right(Matrix<T> & other) {
+        if (rows != other.rows) {
+            throw MatrixException("Cant append matrix with size (" + std::to_string(other.cols) + ", " + std::to_string(other.rows) + ") to the right of matrix with size (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
+        };
+
+        Matrix<T>* mat = new Matrix<T>(cols + other.cols, rows);
+
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < cols; x++) {
+                (*mat)[mat->linear_index(x, y)] = (*this)[linear_index(x, y)];
+            }
+            for (int x = 0; x < other.cols; x++) {
+                (*mat)[mat->linear_index(x + cols, y)] = other[other.linear_index(x, y)];
+            }
+        }
+
+        return mat;
+    };
+
+    Matrix<T>* append_bottom(Matrix<T> & other) {
+        if (cols != other.cols) {
+            throw MatrixException("Cant append matrix with size (" + std::to_string(other.cols) + ", " + std::to_string(other.rows) + ") to the botom of matrix with size (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
+        };
+
+        Matrix<T>* mat = new Matrix<T>(cols, rows + other.rows);
+
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                (*mat)[mat->linear_index(x, y)] = (*this)[linear_index(x, y)];
+            }
+            for (int y = 0; y < other.rows; y++) {
+                (*mat)[mat->linear_index(x, y + rows)] = other[other.linear_index(x, y)];
+            }
+        }
+
+        return mat;
+    };
+
+    T determinant() {
+        if (rows != cols) {
+            throw MatrixException("Can't comute the determinant if the matrix isn't square. Size : (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
+        }
+
+        if (cols == 1) {
+            return get_at(0, 0);
+        }
+
+        T det;
+
+        return ;
+    };
+
 };
 
 
 #endif // MATRIX_HPP
+
+/* TODOs
+
+remove template oT and replace with T and remove type check
+
+mirror matrix horizontally / vertically
+
+finish determinant
+
+*/
