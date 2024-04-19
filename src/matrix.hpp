@@ -103,12 +103,7 @@ public:
         return y * cols + x;
     };
 
-    template <typename oT>
-    Matrix<T>* operator+(Matrix<oT> & other) {
-        // check for types matching
-        if (std::is_same<T, oT>::value == false) {
-            throw MatrixException("Matrix types does not match");
-        }
+    Matrix<T>* operator+(Matrix<T> & other) {
         if (rows != other.rows || cols != other.cols) {
             // dims not matching !!!
             throw MatrixException("Dimentions (" + std::to_string(cols) + ", " + std::to_string(rows) + ") and (" + std::to_string(other.cols) + ", " + std::to_string(other.rows) + ") not matching for matrix addition");
@@ -122,12 +117,7 @@ public:
         return mat;
     };
 
-    template <typename oT> // other type
-    Matrix<T>* operator*(Matrix<oT> & other) {
-        // check for types matching
-        if (std::is_same<T, oT>::value == false) {
-            throw MatrixException("Matrix types does not match");
-        }
+    Matrix<T>* operator*(Matrix<T> & other) {
         if (rows != other.rows || cols != other.cols) {
             // dims not matching !!!
             throw MatrixException("Dimentions (" + std::to_string(cols) + ", " + std::to_string(rows) + ") and (" + std::to_string(other.cols) + ", " + std::to_string(other.rows) + ") not matching for matrix multiplication (elem by elem)\nUse .matmul(Matrix) to perform real matrix multipication");
@@ -176,12 +166,7 @@ public:
         return vec;
     };
 
-    template <typename oT> // other type
-    Matrix<T>* matmul(Matrix<oT>& other) {
-        // check for types matching
-        if (std::is_same<T, oT>::value == false) {
-            throw MatrixException("Matrix types does not match");
-        }
+    Matrix<T>* matmul(Matrix<T>& other) {
         if (cols != other.rows) {
             // dims not matching !!!
             throw MatrixException("Dimentions (" + std::to_string(cols) + ", " + std::to_string(rows) + ") and (" + std::to_string(other.cols) + ", " + std::to_string(other.rows) + ") not matching for matrix multiplication.");
