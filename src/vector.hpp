@@ -125,7 +125,7 @@ public:
             // dims not matching !!!
             throw VectorException("Dimentions (" + std::to_string(size) + ") and (" + std::to_string(other.size) + ") not matching for vector multiplication (elem by elem)");
         }
-        T out = 0;
+        T out = T();
         for (int x = 0; x < size; x++) {
             out += (*this)[x] * other[x];
         }

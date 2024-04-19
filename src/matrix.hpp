@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <string>
+#include <cmath>
 #include "vector.hpp"
 
 
@@ -247,7 +248,7 @@ public:
             throw MatrixException("Error slicing from (" + std::to_string(from_x) + ", " + std::to_string(from_y) + ") : out of bounds (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
         }
 
-        if (to_x < 0 || to_x >= cols || to_y < 0 || to_y >= rows) {
+        if (to_x < 0 || to_x > cols || to_y < 0 || to_y > rows) {
             // out of bound
             throw MatrixException("Error slicing from (" + std::to_string(to_x) + ", " + std::to_string(to_y) + ") : out of bounds (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
         }
@@ -264,6 +265,66 @@ public:
         }
 
         return mat;
+    };
+
+    void put_matrix(int dx, int dy, Matrix<T>& mat) {
+        if (dx < 0 || dy < 0 || dx + mat.cols > cols || dy + mat.rows > rows) {
+            throw MatrixException("Can't put matrix size (" + std::to_string(mat.cols) + ", " + std::to_string(mat.rows) + ") at pos [" + std::to_string(dx) + ", " + std::to_string(dy) + "] in matrix size (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
+        }
+
+        for (int x = 0; x < mat.cols; x++) {
+            for (int y = 0; y < mat.rows; y++) {
+                set_at(x + dx, y + dy, mat.get_at(x, y));
+            }
+        }
+    };
+
+    T cofactor(int x, int y) {
+        if (x < 0 || y < 0 || x >= cols || y >= rows) {
+            // out of bounds
+            throw MatrixException("Error while getting cofactor at [" + std::to_string(x) + ", " + std::to_string(y) + "] but dimentions are (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
+        }
+
+        Matrix<T>* mat = new Matrix<T>(cols - 1, rows - 1);
+
+        // pre-compute conditions that will be reused
+        bool do_top = y > 0;
+        bool do_left = x > 0;
+        bool do_bottom = y < cols - 1;
+        bool do_right = x < rows - 1;
+
+        // top left
+        if (do_top && do_left) {
+            Matrix<T>* sub_mat = slice(0, 0, x, y);
+            mat->put_matrix(0, 0, *sub_mat);
+            delete sub_mat;
+        }
+
+        // top right
+        if (do_top && do_right) {
+            Matrix<T>* sub_mat = slice(x + 1, 0, cols, y);
+            mat->put_matrix(x, 0, *sub_mat);
+            delete sub_mat;
+        }
+
+        // bottom left
+        if (do_bottom && do_left) {
+            Matrix<T>* sub_mat = slice(0, y + 1, x, rows);
+            mat->put_matrix(0, y, *sub_mat);
+            delete sub_mat;
+        }
+
+        // bottom right
+        if (do_bottom && do_right) {
+            Matrix<T>* sub_mat = slice(x + 1, y + 1, cols, rows);
+            mat->put_matrix(x, y, *sub_mat);
+            delete sub_mat;
+        }
+
+        T cof = mat->determinant() * pow(-1, x + y);
+        delete mat;
+
+        return cof;
     };
 
     Matrix<T>* append_right(Matrix<T> & other) {
@@ -306,16 +367,20 @@ public:
 
     T determinant() {
         if (rows != cols) {
-            throw MatrixException("Can't comute the determinant if the matrix isn't square. Size : (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
+            throw MatrixException("Can't compute the determinant if the matrix isn't square. Size : (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
         }
 
         if (cols == 1) {
             return get_at(0, 0);
         }
 
-        T det;
+        T det = T();
 
-        return ;
+        for (int x = 0; x < cols; x++) {
+            det += cofactor(x, 0) * get_at(x, 0);
+        }
+
+        return det;
     };
 
 };
@@ -326,6 +391,7 @@ public:
 /* TODOs
 
 remove template oT and replace with T and remove type check
+replace things i can with set_at / get_at
 
 mirror matrix horizontally / vertically
 
