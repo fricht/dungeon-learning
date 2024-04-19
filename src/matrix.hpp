@@ -111,7 +111,7 @@ public:
         Matrix<T>* mat = new Matrix<T>(cols, rows);
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
-                (*mat)[mat->linear_index(x, y)] = (*this)[linear_index(x, y)] + other[other.linear_index(x, y)];
+                mat->set_at(x, y, get_at(x, y) + other.get_at(x, y));
             }
         }
         return mat;
@@ -125,7 +125,7 @@ public:
         Matrix<T>* mat = new Matrix<T>(cols, rows);
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
-                (*mat)[mat->linear_index(x, y)] = (*this)[linear_index(x, y)] * other[other.linear_index(x, y)];
+                mat->set_at(x, y, get_at(x, y) * other.get_at(x, y));
             }
         }
         return mat;
@@ -136,7 +136,7 @@ public:
         Matrix<nT>* mat = new Matrix<nT>(cols, rows);
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
-                (*mat)[mat->linear_index(x, y)] = static_cast<nT>((*this)[linear_index(x, y)]);
+                mat->set_at(x, y, static_cast<nT>(get_at(x, y)));
             }
         }
         return mat;
@@ -184,7 +184,7 @@ public:
 
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < other.cols; x++) {
-                (*mat)[mat->linear_index(x, y)] = (rows_vec[y])->dot(*(cols_vec[y]));
+                mat->set_at(x, y, (rows_vec[y])->dot(*(cols_vec[y])));
             }
         }
 
@@ -205,7 +205,7 @@ public:
 
         for (int x = 0; x < cols; x++) {
             for (int y = 0; y < rows; y++) {
-                (*mat)[mat->linear_index(y, x)] = (*this)[linear_index(x, y)];
+                mat->set_at(x, y, get_at(y, x));
             }
         }
 
@@ -245,7 +245,7 @@ public:
 
         for (int x = 0; x < dx; x++) {
             for (int y = 0; y < dy; y++) {
-                (*mat)[mat->linear_index(x, y)] = (*this)[linear_index(x + from_x, y + from_y)];
+                mat->set_at(x, y, get_at(x + from_x, y + from_y));
             }
         }
 
@@ -319,12 +319,14 @@ public:
 
         Matrix<T>* mat = new Matrix<T>(cols + other.cols, rows);
 
+        // here put_matrix can be used
+
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
-                (*mat)[mat->linear_index(x, y)] = (*this)[linear_index(x, y)];
+                mat->set_at(x, y, get_at(x, y));
             }
             for (int x = 0; x < other.cols; x++) {
-                (*mat)[mat->linear_index(x + cols, y)] = other[other.linear_index(x, y)];
+                mat->set_at(x + cols, y, other.get_at(x, y));
             }
         }
 
@@ -340,10 +342,10 @@ public:
 
         for (int x = 0; x < cols; x++) {
             for (int y = 0; y < rows; y++) {
-                (*mat)[mat->linear_index(x, y)] = (*this)[linear_index(x, y)];
+                mat->set_at(x, y, get_at(x, y));
             }
             for (int y = 0; y < other.rows; y++) {
-                (*mat)[mat->linear_index(x, y + rows)] = other[other.linear_index(x, y)];
+                mat->set_at(x, y + rows, other.get_at(x, y));
             }
         }
 
@@ -379,6 +381,8 @@ remove template oT and replace with T and remove type check
 replace things i can with set_at / get_at
 
 mirror matrix horizontally / vertically
+inverse matrix
+multiply by constant
 
 finish determinant
 
