@@ -77,6 +77,16 @@ public:
         delete[] data;
     };
 
+    Matrix<T>* copy() {
+        Matrix<T>* mat = new Matrix<T>(cols, rows);
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                mat->set_at(x, y, get_at(x, y));
+            }
+        }
+        return mat;
+    };
+
     void fill(T val) {
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < cols; x++) {
@@ -128,6 +138,16 @@ public:
                 mat->set_at(x, y, get_at(x, y) * other.get_at(x, y));
             }
         }
+        return mat;
+    };
+
+    Matrix<T>* operator*(T factor) {
+        // can be optimized but ...
+        Matrix<T>* mat = copy();
+        T func = [factor](int, int, T value) {
+            return value * factor;
+        };
+        mat->apply_function(func);
         return mat;
     };
 
@@ -387,6 +407,5 @@ public:
 
 mirror matrix horizontally / vertically
 inverse matrix
-multiply by constant
 
 */
