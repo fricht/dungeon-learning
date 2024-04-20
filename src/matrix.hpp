@@ -370,6 +370,14 @@ public:
         return det;
     };
 
+    void apply_function(T func(int, int, T)) {
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                set_at(x, y, func(x, y, get_at(x, y)));
+            }
+        }
+    };
+
 };
 
 
@@ -377,13 +385,8 @@ public:
 
 /* TODOs
 
-remove template oT and replace with T and remove type check
-replace things i can with set_at / get_at
-
 mirror matrix horizontally / vertically
 inverse matrix
 multiply by constant
-
-finish determinant
 
 */
