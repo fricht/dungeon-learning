@@ -290,6 +290,14 @@ public:
             throw MatrixException("Error while getting cofactor at [" + std::to_string(x) + ", " + std::to_string(y) + "] but dimentions are (" + std::to_string(cols) + ", " + std::to_string(rows) + ")");
         }
 
+        if (cols != rows) {
+            throw MatrixException("Can't get cofactor of a non-square matrix (because determinant is involved).");
+        }
+
+        if (cols == 1) { // && rows == 1
+            return get_at(0, 0);
+        }
+
         Matrix<T>* mat = new Matrix<T>(cols - 1, rows - 1);
 
         // pre-compute conditions that will be reused
@@ -330,6 +338,10 @@ public:
         delete mat;
 
         return cof;
+    };
+
+    Matrix<T>* comatrix() {
+        return new Matrix(cols, rows, cofactor);
     };
 
     Matrix<T>* append_right(Matrix<T> & other) {
@@ -396,6 +408,20 @@ public:
                 set_at(x, y, func(x, y, get_at(x, y)));
             }
         }
+    };
+
+    Matrix<T>* inverse() {
+        // WARNING !!!
+        // if the template is <int>, you might want to convert it to <float>
+        // oterwise it will be rounded (i think)
+
+        T det = determinant();
+        if (det == 0) {
+            throw MatrixException("Can't get the inverse of singular matrix. Determinant is 0.");
+        }
+
+        Matrix<T>* mat = comatrix()->transpose();
+        return mat * (1 / det);
     };
 
 };
