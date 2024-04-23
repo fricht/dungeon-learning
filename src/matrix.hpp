@@ -1,6 +1,7 @@
 #ifndef MATRIX_HPP
 #define MATRIX_HPP
 
+#include <iostream>
 #include <exception>
 #include <string>
 #include <cmath>
@@ -55,6 +56,8 @@ public:
         }
     };
 
+    // template <typename Func>
+    // Matrix(int c, int r, Func generator) : cols(c), rows(r) {
     Matrix(int c, int r, T generator(int, int)) : cols(c), rows(r) {
         if (c < 1 || r < 1) {
             throw MatrixException("Invalid Matrix size (" + std::to_string(c) + ", " + std::to_string(r) + ")");
@@ -75,6 +78,15 @@ public:
             delete[] data[i];
         }
         delete[] data;
+    };
+
+    void display() {
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                std::cout << get_at(x, y) << " ";
+            }
+            std::cout << std::endl;
+        }
     };
 
     Matrix<T>* copy() {
@@ -144,10 +156,11 @@ public:
     Matrix<T>* operator*(T factor) {
         // can be optimized but ...
         Matrix<T>* mat = copy();
-        T func = [factor](int, int, T value) {
-            return value * factor;
-        };
-        mat->apply_function(func);
+        // auto func = [factor](int, int, T value) {
+        //     return value * factor;
+        // };
+        // mat->apply_function(func);
+        mat->apply_function([factor](int, int, T value){return value * factor;});
         return mat;
     };
 
@@ -341,7 +354,8 @@ public:
     };
 
     Matrix<T>* comatrix() {
-        return new Matrix(cols, rows, cofactor);
+        Matrix<T>* mat = new Matrix<T>(cols, rows, this->cofactor); // ERROR HERE !!!
+        return mat;
     };
 
     Matrix<T>* append_right(Matrix<T> & other) {
@@ -402,7 +416,9 @@ public:
         return det;
     };
 
-    void apply_function(T func(int, int, T)) {
+    template<typename Func> // maybe not the cleaner way to pass a lambda as arg
+                            // but otherwise it doesn't work :(
+    void apply_function(Func func) {
         for (int x = 0; x < cols; x++) {
             for (int y = 0; y < rows; y++) {
                 set_at(x, y, func(x, y, get_at(x, y)));
@@ -413,7 +429,7 @@ public:
     Matrix<T>* inverse() {
         // WARNING !!!
         // if the template is <int>, you might want to convert it to <float>
-        // oterwise it will be rounded (i think)
+        // oterwise it will be rounded (i think, if not should be error)
 
         T det = determinant();
         if (det == 0) {
@@ -421,7 +437,7 @@ public:
         }
 
         Matrix<T>* mat = comatrix()->transpose();
-        return mat * (1 / det);
+        return (*mat) * (1 / det);
     };
 
 };
